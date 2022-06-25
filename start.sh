@@ -5,17 +5,26 @@ pm[/etc/gentoo-release]=emerge
 pm[/etc/SuSE-release]=zypp
 pm[/etc/debian_version]=apt-get
 pm[/etc/alpine-release]=apk
-pm[$(ps -ef|grep -c com.termux )]=pkg
 
+if [ $(echo $PREFIX | grep -o 'com.termux') ];then
+    on_termux=True
+else
+    on_termux=False  
+fi
 
 install_package () {
-    for f in ${!pm[@]}
-do
-    if [[ -f $f ]];then
-        echo "Using : ${pm[$f]} to install packages"
-        sudo ${pm[$f]} install "$1" -y || ${pm[$f]} install "$1" -y
-    fi
-done    
+    if [ "$on_termux" == "False" ]; then
+        { for f in ${!pm[@]}  
+            do
+                if [[ -f $f ]];then
+                    echo "Using : [${pm[$f]}] to install packages"
+                    sudo ${pm[$f]} install "$1" -y || ${pm[$f]} install "$1" -y
+                    fi
+            done    }
+    else
+        { echo "Using : [pkg] to install packages"
+        pkg install "$1" -y }
+fi
 }
 
 package_check () {
