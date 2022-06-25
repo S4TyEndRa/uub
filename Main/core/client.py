@@ -130,11 +130,11 @@ class AltruixClient:
 
     async def termux_check(self):
         a, b, c, d = await self.run_cmd_async("echo $PREFIX | grep -o 'com.termux'")
-        if c == 0:
+        dns_nameserver = self.config.DNS_NAMESERVER
+        if c == 0 or dns_nameserver:
             import dns.resolver
-
             dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
-            dns.resolver.default_resolver.nameservers = ["8.8.8.8"]
+            dns.resolver.default_resolver.nameservers = [dns_nameserver or "8.8.8.8"]
 
     async def _db_setup(self):
         await self.termux_check()

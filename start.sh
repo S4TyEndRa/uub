@@ -39,12 +39,17 @@ install_all_packages () {
     echo "Checking and installing Required packages...."
     package_check 'python3'
     package_check 'ffmpeg'
-    package_check 'python3-venv'
+    if [ "$on_termux" == "False" ]; then
+        package_check 'python3-venv'
+    fi
 }
 
 activate_venv_and_install_pip_packages () {
     sudo python3 -m venv venv || python3 -m venv venv
     source venv/bin/activate
+    if [ "$on_termux" == "True" ]; then
+        pip install wheel && pkg install libjpeg-turbo && LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/" pip install Pillow
+    fi
     sudo pip3 install --upgrade pip || pip3 install --upgrade pip
     sudo pip3 install -r requirements.txt || pip3 install -r requirements.txt
     sudo python3 -m Main || python3 -m Main
