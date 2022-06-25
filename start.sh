@@ -22,8 +22,8 @@ install_package () {
                     fi
             done    }
     else
-        { echo "Using : [pkg] to install packages"
-        pkg install "$1" -y }
+        echo "Using : [pkg] to install packages"
+        pkg install "$1" -y 
 fi
 }
 
