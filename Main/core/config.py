@@ -42,7 +42,6 @@ class BaseConfig(object):
     API_HASH = getenv("API_HASH")
     HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
     HELP_MENU_ROWS = int(getenv("HELP_MENU_ROWS", 6))
-    DNS_NAMESERVER = getenv("DNS_NAMESERVER")
     HELP_MENU_COLUMNS = int(getenv("HELP_MENU_ROWS", 3))
     DEFAULT_REPO = "https://github.com/Altruix/Altruix"
     HEROKU_API_KEY = getenv("HEROKU_API_KEY")

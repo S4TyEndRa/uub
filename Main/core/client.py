@@ -128,16 +128,16 @@ class AltruixClient:
         )
         self.log("Initialized Logger successfully!")
 
-    async def termux_check(self):
-        a, b, c, d = await self.run_cmd_async("echo $PREFIX | grep -o 'com.termux'")
-        dns_nameserver = self.config.DNS_NAMESERVER
-        if c == 0 or dns_nameserver:
-            import dns.resolver
+    async def resolve_dns(self):
+        import dns.resolver
+        try:
+            dns.resolver.resolve('www.google.com')
+        except Exception:
             dns.resolver.default_resolver = dns.resolver.Resolver(configure=False)
-            dns.resolver.default_resolver.nameservers = [dns_nameserver or "8.8.8.8"]
+            dns.resolver.default_resolver.nameservers = ["8.8.8.8"]
 
     async def _db_setup(self):
-        await self.termux_check()
+        await self.resolve_dns()
         self.db = MongoDB(self.config.DB_URI)
         self.log("Initialized Mongo successfully!")
         await self.db.ping()
